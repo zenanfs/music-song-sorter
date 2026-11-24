@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RETRO SONG SORTERS — DUELOS 1 VS 1</title>
+  <meta name="description" content="Colección de Song Sorters estilo retro para enfrentar canciones 1 vs 1 y armar tu ranking personal.">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    :root {
+      --bg: #121218;
+      --paper: #f6f2e9;
+      --ink: #111111;
+      --yellow: #fce300;
+      --red: #e52521;
+      --green: #78be20;
+      --cyan: #58c9dc;
+      --font-display: 'Impact', 'Arial Black', 'Franklin Gothic Heavy', sans-serif;
+      --font-body: 'Trebuchet MS', 'Verdana', 'Tahoma', sans-serif;
+      --font-mono: 'Courier New', 'Lucida Console', monospace;
+    }
+    html, body { margin: 0; padding: 0; min-height: 100vh; }
+    body {
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+        repeating-linear-gradient(
+          -45deg,
+          rgba(88, 201, 220, 0.04) 0px,
+          rgba(88, 201, 220, 0.04) 14px,
+          transparent 14px,
+          transparent 30px
+        );
+      background-size: 16px 16px, 42px 42px;
+      color: var(--ink);
+      font-family: var(--font-body);
+    }
+    .wrapper {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 28px 16px 56px;
+      text-align: center;
+    }
+    .badge {
+      display: inline-block;
+      background: var(--yellow);
+      color: var(--ink);
+      border: 2px solid #000;
+      box-shadow: 3px 3px 0 var(--red);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: bold;
+      letter-spacing: 0.12em;
+      padding: 3px 12px;
+      margin-bottom: 10px;
+    }
+    h1 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: clamp(2.4rem, 7vw, 4.3rem);
+      line-height: 1;
+      color: var(--yellow);
+      -webkit-text-stroke: 2.5px #000;
+      text-shadow: 4px 4px 0 var(--red), 7px 7px 0 #000;
+    }
+    .subtitle {
+      margin: 10px auto 28px;
+      max-width: 600px;
+      color: #eaeaea;
+      font-size: 0.96rem;
+      line-height: 1.45;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 20px;
+      text-align: left;
+    }
+    .band-card {
+      background: var(--paper);
+      border: 3px solid #000;
+      box-shadow: 6px 6px 0 #000;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: transform 100ms ease, box-shadow 100ms ease;
+    }
+    .band-card:hover {
+      transform: translate(-3px, -3px);
+      box-shadow: 9px 9px 0 var(--yellow);
+    }
+    .band-card.top:hover { box-shadow: 9px 9px 0 var(--red); }
+    .band-card.beatles:hover { box-shadow: 9px 9px 0 var(--green); }
+
+    .cover-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 3px solid #000;
+      background: #000;
+      gap: 2px;
+    }
+    .cover-strip img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      display: block;
+    }
+    .card-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      gap: 10px;
+    }
+    .band-name {
+      margin: 0;
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 1.75rem;
+      line-height: 1.05;
+      color: var(--ink);
+    }
+    .meta-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: bold;
+    }
+    .tag {
+      background: #ffffff;
+      border: 1.5px solid #000;
+      padding: 2px 6px;
+    }
+    .tag.accent-top { background: var(--yellow); }
+    .tag.accent-beatles { background: var(--green); color: #fff; }
+    .desc {
+      margin: 0;
+      font-size: 0.86rem;
+      color: #333;
+      line-height: 1.4;
+      flex: 1;
+    }
+    .play-btn {
+      display: block;
+      text-align: center;
+      text-decoration: none;
+      background: var(--yellow);
+      color: #000;
+      border: 2px solid #000;
+      box-shadow: 4px 4px 0 #000;
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      letter-spacing: 0.05em;
+      padding: 10px 14px;
+      margin-top: 6px;
+      transition: transform 80ms ease, background-color 100ms ease;
+    }
+    .band-card.top .play-btn:hover { background: var(--red); color: #fff; }
+    .band-card.beatles .play-btn:hover { background: var(--green); color: #fff; }
+    .play-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #000; }
+
+    footer {
+      margin-top: 34px;
+      padding: 14px 18px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 2px dashed #555;
+      color: #cccccc;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      line-height: 1.5;
+    }
+    footer a { color: var(--yellow); }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="badge">★ COLECCIÓN RETRO 1 VS 1 · DATASETS KWORB SPOTIFY ★</div>
+    <h1>MUSIC SONG SORTERS</h1>
+    <p class="subtitle">
+      Elige una banda, filtra los discos que quieras incluir y enfrenta canciones 1 contra 1 hasta construir tu ranking personal definitivo. Funciona 100% en tu navegador, con guardado local, enlace compartible e imagen descargable.
+    </p>
+
+    <section class="grid" aria-label="Bandas disponibles">
+      <!-- Twenty One Pilots -->
+      <article class="band-card top">
+        <div class="cover-strip">
+          <img src="TwentyOnePilotsSorter/assets/covers/vessel.jpg" alt="Vessel">
+          <img src="TwentyOnePilotsSorter/assets/covers/blurryface.jpg" alt="Blurryface">
+          <img src="TwentyOnePilotsSorter/assets/covers/trench.jpg" alt="Trench">
+          <img src="TwentyOnePilotsSorter/assets/covers/breach.jpg" alt="Breach">
+        </div>
+        <div class="card-body">
+          <h2 class="band-name">TWENTY ONE PILOTS</h2>
+          <div class="meta-tags">
+            <span class="tag accent-top">99 canon por defecto</span>
+            <span class="tag">182 canciones totales</span>
+            <span class="tag">2009 – 2026</span>
+          </div>
+          <p class="desc">
+            Desde <em>Self-Titled</em>, <em>Regional at Best</em>, <em>Vessel</em>, <em>Blurryface</em> y <em>Trench</em> hasta <em>Clancy</em> y <em>Breach</em>. Incluye filtros para quitar conciertos, MTV Unplugged, remixes, lados B y comentarios.
+          </p>
+          <a class="play-btn" href="TwentyOnePilotsSorter/index.html">▶ JUGAR TWENTY ONE PILOTS</a>
+        </div>
+      </article>
+
+      <!-- The Beatles -->
+      <article class="band-card beatles">
+        <div class="cover-strip">
+          <img src="TheBeatlesSorter/assets/covers/rubber_soul.jpg" alt="Rubber Soul">
+          <img src="TheBeatlesSorter/assets/covers/revolver.jpg" alt="Revolver">
+          <img src="TheBeatlesSorter/assets/covers/sgt_pepper.jpg" alt="Sgt. Pepper's">
+          <img src="TheBeatlesSorter/assets/covers/abbey_road.jpg" alt="Abbey Road">
+        </div>
+        <div class="card-body">
+          <h2 class="band-name">THE BEATLES</h2>
+          <div class="meta-tags">
+            <span class="tag accent-beatles">200 canon sin duplicados</span>
+            <span class="tag">501 pistas Kworb</span>
+            <span class="tag">1962 – 2026</span>
+          </div>
+          <p class="desc">
+            Los 13 discos oficiales de estudio + <em>Past Masters</em> y sencillos icónicos (<em>Hey Jude</em>, <em>Now And Then</em>). Con presets por era (Beatlemania / 1965–1970) y filtros para quitar Takes, BBC, Rooftop, LOVE y mezclas duplicadas.
+          </p>
+          <a class="play-btn" href="TheBeatlesSorter/index.html">▶ JUGAR THE BEATLES</a>
+        </div>
+      </article>
+    </section>
+
+    <footer>
+      Inspirado en <a href="https://rhcpsorter.neocities.org/" target="_blank" rel="noopener noreferrer">rhcpsorter.neocities.org</a> y <em>charasort</em> · Datos de canciones y streams tomados de <a href="https://kworb.net/" target="_blank" rel="noopener noreferrer">Kworb Spotify</a>.<br>
+      100% estático (HTML + CSS + JS) · Sin servidor ni dependencias externas.
+    </footer>
+  </div>
+</body>
+</html>

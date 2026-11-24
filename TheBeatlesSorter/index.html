@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>THE BEATLES — SONG SORTER</title>
+  <meta name="description" content="Duelos 1 vs 1 con todas las canciones de The Beatles para armar tu ranking personal.">
+  <link rel="icon" type="image/svg+xml" href="assets/default-left.svg">
+  <link rel="stylesheet" href="src/css/styles.css">
+</head>
+<body>
+  <div class="page-wrapper">
+    <header class="site-header">
+      <nav style="margin-bottom:8px;font-family:'Courier New',monospace;font-size:0.78rem;">
+        <a href="../index.html" style="color:#ffe169;font-weight:bold;text-decoration:none;background:#111;border:1.5px solid #78be20;padding:2px 9px;">← Todos los Song Sorters</a>
+      </nav>
+      <div class="era-badge" aria-hidden="true">★ ABBEY ROAD · KWORB SPOTIFY DATASET · 1962–2026 ★</div>
+      <h1 class="title-main">THE BEATLES</h1>
+      <p class="title-sub">SONG SORTER</p>
+    </header>
+
+    <main class="container">
+      <!-- Retro Progress Bar -->
+      <section class="progress" aria-label="Progreso del ranking">
+        <div class="progress-header">
+          <span class="progressbattle">Duelo N.º 1</span>
+          <span class="progress-eta"></span>
+        </div>
+        <div class="progressbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <div class="progressfill"></div>
+          <span class="progresstext">0%</span>
+        </div>
+      </section>
+
+      <!-- Classic 3-Column Retro Sorter Grid -->
+      <section class="sorter" aria-label="Arena de duelos 1 contra 1">
+        <!-- Left Song Card -->
+        <button type="button" class="left sort card" id="btn-left" aria-label="Elegir canción de la izquierda">
+          <div class="cover-frame">
+            <img src="assets/default-left.svg" alt="Portada opción izquierda" class="left sort image" width="180" height="180">
+          </div>
+          <div class="left sort text">
+            <p class="song-title">Lado A</p>
+            <span class="song-album">Esperando inicio...</span>
+          </div>
+        </button>
+
+        <!-- Center Control Column -->
+        <div class="center-controls">
+          <!-- Pre-start Buttons -->
+          <button type="button" class="starting start button" id="btn-start">
+            <strong>THE BEATLES</strong>
+            <span>Song Sorter</span>
+            <em class="start-cta">¡Clic para Empezar!</em>
+          </button>
+          <button type="button" class="starting load button" id="btn-load">
+            Cargar <span id="load-type-label">Progreso</span>
+          </button>
+
+          <!-- Sorting Buttons -->
+          <button type="button" class="sorting tie button" id="btn-tie" title="Atajo: ↑, K o 1">
+            Empate
+          </button>
+          <button type="button" class="sorting undo button" id="btn-undo" title="Atajo: ↓, J o 2">
+            Deshacer
+          </button>
+          <button type="button" class="sorting save button" id="btn-save" title="Atajo: S o 3">
+            Guardar Progreso
+          </button>
+          <button type="button" class="sorting quit button" id="btn-quit" title="Volver a los filtros">
+            Cambiar Filtros
+          </button>
+
+          <!-- Finished Buttons -->
+          <button type="button" class="finished save button" id="btn-share-url">
+            Generar URL
+          </button>
+          <button type="button" class="finished getimg button" id="btn-gen-img">
+            Descargar Imagen
+          </button>
+          <button type="button" class="finished list button" id="btn-text-list">
+            Lista de Texto
+          </button>
+          <button type="button" class="finished restart button" id="btn-restart">
+            Nuevo Ranking
+          </button>
+        </div>
+
+        <!-- Right Song Card -->
+        <button type="button" class="right sort card" id="btn-right" aria-label="Elegir canción de la derecha">
+          <div class="cover-frame">
+            <img src="assets/default-right.svg" alt="Portada opción derecha" class="right sort image" width="180" height="180">
+          </div>
+          <div class="right sort text">
+            <p class="song-title">Lado B</p>
+            <span class="song-album">Esperando inicio...</span>
+          </div>
+        </button>
+      </section>
+
+      <!-- Live Selection Counter & Presets (visible before starting) -->
+      <section class="filter-panel" id="filter-panel" aria-label="Filtros de álbumes y categorías">
+        <div class="selection-summary">
+          <div class="selection-counts">
+            <span id="selected-count-badge"><strong>200</strong> canciones seleccionadas</span>
+            <span class="sep">|</span>
+            <span id="estimated-duels-badge">~1200 duelos estimados</span>
+          </div>
+          <div class="preset-bar" role="group" aria-label="Preajustes rápidos">
+            <span class="preset-label">Presets:</span>
+            <button type="button" class="preset-btn" data-preset="canon">Canon + Sencillos</button>
+            <button type="button" class="preset-btn" data-preset="studio-only">Solo 13 Discos</button>
+            <button type="button" class="preset-btn" data-preset="late-era">Era 1965–1970</button>
+            <button type="button" class="preset-btn" data-preset="early-era">Beatlemania 63–65</button>
+            <button type="button" class="preset-btn" data-preset="singles-only">Solo Sencillos</button>
+            <button type="button" class="preset-btn" data-preset="all-kworb">Todo Kworb (500)</button>
+            <button type="button" class="preset-btn preset-clear" data-preset="none">Limpiar discos</button>
+          </div>
+          <p class="filter-warning" id="filter-warning" hidden></p>
+        </div>
+
+        <!-- Classic Retro Checkbox Grid -->
+        <div class="options" id="options-grid"></div>
+      </section>
+
+      <!-- Results Controls & Ranked Table -->
+      <section class="results-section" id="results-section" hidden aria-label="Ranking final">
+        <div class="time taken" id="time-taken"></div>
+
+        <div class="result-toolbar">
+          <label class="image-selector-label">
+            Mostrar portadas en el resultado:
+            <select id="image-count-select">
+              <option value="0">Ninguna (0)</option>
+              <option value="3">Top 3</option>
+              <option value="5">Top 5</option>
+              <option value="10" selected>Top 10</option>
+              <option value="20">Top 20</option>
+              <option value="999">Todas</option>
+            </select>
+          </label>
+          <label class="streams-toggle-label">
+            <input type="checkbox" id="toggle-streams" checked>
+            Mostrar streams de Spotify (Kworb)
+          </label>
+        </div>
+
+        <div class="results" id="results-table"></div>
+      </section>
+
+      <!-- Retro Info / Controls Footer -->
+      <footer class="info">
+        <p class="info-links">
+          <a href="https://kworb.net/spotify/artist/3WrFJ7ztbogyGnTHbHJFl2_songs.html" target="_blank" rel="noopener noreferrer">Dataset Kworb (Spotify)</a>
+          &nbsp;|&nbsp;
+          <a href="https://rhcpsorter.neocities.org/" target="_blank" rel="noopener noreferrer">Inspirado en RHCP Sorter</a>
+          &nbsp;|&nbsp;
+          <button type="button" class="link-btn clearsave" id="btn-clear-save">Borrar datos guardados</button>
+        </p>
+
+        <p class="info-intro"><strong>Cómo funciona:</strong> Haz clic en la canción de The Beatles que prefieras en cada duelo 1 vs 1, o pulsa <strong>Empate</strong> si te gustan igual o no conoces alguna.</p>
+        <p>Por defecto se excluyen duplicados de remixes/mezclas alternas, tomas de estudio (Takes/Esher Demos), conciertos (BBC/Hollywood Bowl/Rooftop), mashups de LOVE y lados B menores para que tu ranking sea limpio y ágil. ¡Puedes elegir solo 1 o 2 discos si quieres una partida rápida!</p>
+
+        <div class="keyboard-box">
+          <p><strong>Controles de teclado durante los duelos:</strong></p>
+          <p>
+            <kbd>←</kbd> / <kbd>H</kbd> Elegir izquierda &nbsp;·&nbsp;
+            <kbd>→</kbd> / <kbd>L</kbd> Elegir derecha &nbsp;·&nbsp;
+            <kbd>↑</kbd> / <kbd>K</kbd> / <kbd>1</kbd> Empate &nbsp;·&nbsp;
+            <kbd>↓</kbd> / <kbd>J</kbd> / <kbd>2</kbd> Deshacer &nbsp;·&nbsp;
+            <kbd>S</kbd> / <kbd>3</kbd> Guardar
+          </p>
+          <p>Antes de empezar: <kbd>Enter</kbd> o <kbd>S</kbd> para iniciar.</p>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Native Modal Dialog for Text List & Share URL -->
+  <dialog id="retro-dialog" class="retro-dialog">
+    <div class="dialog-header">
+      <h2 id="dialog-title">Lista de Texto</h2>
+      <button type="button" class="dialog-close" id="dialog-close" aria-label="Cerrar">✕</button>
+    </div>
+    <div class="dialog-body">
+      <p id="dialog-desc" class="dialog-desc"></p>
+      <textarea id="dialog-textarea" readonly rows="14"></textarea>
+    </div>
+    <div class="dialog-footer">
+      <button type="button" class="dialog-btn primary" id="dialog-copy">Copiar al portapapeles</button>
+      <button type="button" class="dialog-btn" id="dialog-ok">Cerrar</button>
+    </div>
+  </dialog>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="src/js/data.js"></script>
+  <script src="src/js/main.js"></script>
+</body>
+</html>
+
